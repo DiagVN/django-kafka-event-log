@@ -19,3 +19,5 @@ dev.log
 credentials.json
 .tf/
 db.sqlite3
+dist/
+django_event_sourcing.egg-info/
