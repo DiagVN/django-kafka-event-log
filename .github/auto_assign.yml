@@ -1,0 +1,18 @@
+# Set to true to add reviewers to pull requests
+addReviewers: true
+
+# Set to true to add assignees to pull requests
+addAssignees: author
+
+# A list of reviewers to be added to pull requests (GitHub user name). Can input team name.
+reviewers:
+  - nqtrg
+
+
+# Number of reviewers has no impact on Github teams
+# Set 0 to add all the reviewers (default: 0)
+numberOfReviewers: 0
+
+# A list of keywords to be skipped the process that add reviewers if pull requests include it
+skipKeywords:
+  - wip

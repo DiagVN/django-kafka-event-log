@@ -1,0 +1,69 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@0.2.1
+
+
+jobs:
+  build-and-test:
+    environment:
+      COMPOSE_COMMAND: docker-compose -f docker-compose.yml -f .circleci/docker-compose.override.yml
+    executor: python/default
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Install Docker Compose
+          command: pip install -U docker-compose
+      - run:
+          name: Copy env
+          command: cp .env.example .env
+      - run:
+          command: $COMPOSE_COMMAND up --build -d ci
+          name: Build docker compose
+      - run:
+          command: $COMPOSE_COMMAND ps
+          name: Compose ps
+      - run:
+          command: $COMPOSE_COMMAND exec ci flake8
+          name: Run Flake8
+      - run:
+          command: $COMPOSE_COMMAND exec ci coverage run manage.py test
+          name: Run Test
+      - run:
+          command: $COMPOSE_COMMAND exec ci coverage xml
+          name: Run coverage report xml
+      - run:
+          command: |
+            docker cp project_ci_1:/app/coverage.xml .
+            bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+            #ci_env=`bash <(curl -s https://codecov.io/env)`
+            #$COMPOSE_COMMAND exec $ci_env ci bash -c "bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
+          name: Upload coverage
+
+
+workflows:
+  build:
+    jobs:
+      - build-and-test:
+          filters:
+            branches:
+              ignore:
+                - develop
+                - master
+  staging:
+    jobs:
+      - build-and-test:
+          filters:
+            branches:
+              only:
+                - develop
+
+  prod:
+    jobs:
+      - build-and-test:
+          filters:
+            branches:
+              only:
+                - master

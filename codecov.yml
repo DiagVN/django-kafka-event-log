@@ -1,0 +1,6 @@
+ignore:
+  - "manage.py"
+  - "root/settings.py"
+  - "root/celery.py"
+  - "*/migrations/*"
+  - "app_name/tests/**/*.app_name

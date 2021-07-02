@@ -1,0 +1,12 @@
+version: "3"
+services:
+  ci:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+      target: dev
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      MODE: ci
+    depends_on:
+      - redis
