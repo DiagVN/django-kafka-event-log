@@ -10,3 +10,4 @@ services:
       MODE: ci
     depends_on:
       - redis
+      - postgres
