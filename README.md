@@ -4,6 +4,12 @@ Store an event and publish the event to Kafka
 
 ## Setup
 
+Install package:
+
+```shell
+pip install git+https://github.com/DiagVN/django-kafka-event-log.git
+```
+
 In `settings.py`:
 
 ```python

@@ -1,3 +1,4 @@
+import json
 import logging
 
 from confluent_kafka import Producer
@@ -31,16 +32,19 @@ class PublishKafkaEventUtil(BaseServiceMixin):
         self.topic = self.get_topic()
 
     def build_kafka_message(self):
-        return {
+        message = {
             'event_name': self.event_name,
             'metadata': self.metadata,
             'data': self.serializer(self.model_object).data,
         }
 
+        return json.dumps(message)
+
     def publish_kafka_message(self, message=None, key=None, producer=None):
         if not producer:  # pragma: no cover
             producer = Producer(KAFKA_PRODUCER_CONFIG)
         producer.produce(self.topic, key=key, value=message)
+
         producer.flush()
 
     def get_topic(self) -> str:

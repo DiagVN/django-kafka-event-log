@@ -21,3 +21,4 @@ credentials.json
 db.sqlite3
 dist/
 django_event_sourcing.egg-info/
+app_name/

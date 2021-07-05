@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from unittest import mock
 
@@ -30,11 +31,11 @@ class TestPublishKafkaEventUtil(TransactionTestCase):
 
     def test_build_kafka_message(self):
         message = self.util.build_kafka_message()
-        expected_message = {
+        expected_message = json.dumps({
             'event_name': 'Created',
             'metadata': {'purpose': 'testing'},
             'data': {'name': 'test', 'created_at': '2021-07-02T06:00:34.727800Z'},
-        }
+        })
 
         self.assertEqual(message, expected_message)
 
@@ -66,11 +67,11 @@ class TestPublishKafkaEventUtil(TransactionTestCase):
             serializer=SampleSerializer,
             metadata={'purpose': 'testing'},
         )
-        message = {
+        message = json.dumps({
             'event_name': 'Created',
             'metadata': {'purpose': 'testing'},
             'data': {'name': 'test', 'created_at': '2021-07-02T06:00:34.727800Z'},
-        }
+        })
         mock_publish_kafka_message.assert_called_once_with(
             message,
         )

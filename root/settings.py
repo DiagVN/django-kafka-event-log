@@ -52,7 +52,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 LOCAL_APPS = [
-    # 'app_name',
+    'app_name',
     'events',
 ]
 
