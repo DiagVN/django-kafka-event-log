@@ -7,7 +7,7 @@ Quick start
 -----------
 1. Install package::
 
-    pip install git+https://github.com/DiagVN/django-kafka-event-log.git
+    pip install django-kafka-event-log
 
 2. Add "events" to your INSTALLED_APPS setting like this::
 
@@ -26,4 +26,16 @@ Quick start
     KAFKA_SASL_PASSWORD = 'KAFKA_SASL_PASSWORD'
 
 
-4.
+4. Store and send event::
+
+    from events.utils import PublishKafkaEventUtil
+    from myapp.serializers.mymodel_serializer import MyModelSerializer
+
+    PublishKafkaEventUtil.call(
+        event_name='Created',
+        model_object=model_obj,
+        serializer=ModelSerializer,
+        metadata={'purpose': 'testing'},
+    )
+
+Author: Diag

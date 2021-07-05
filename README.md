@@ -7,13 +7,13 @@ Store an event and publish the event to Kafka
 Install package:
 
 ```shell
-pip install git+https://github.com/DiagVN/django-kafka-event-log.git
+pip install django-kafka-event-log
 ```
 
 In `settings.py`:
 
 ```python
-LOCAL_APPS = [
+INSTALLED_APPS = [
     ...
     'events',
 ]
@@ -38,4 +38,15 @@ PublishKafkaEventUtil.call(
     serializer=ModelSerializer,
     metadata={'purpose': 'testing'},
 )
+```
+
+## Release:
+
+Set tag the same version as VERSION in setup.py
+
+```shell
+git commit -m "..."
+git tag <version>
+git push origin develop
+git push origin tag
 ```
