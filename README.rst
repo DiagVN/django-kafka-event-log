@@ -1,7 +1,6 @@
-=====
-Kafka Event
-=====
-
+======================
+Django Kafka Event Log
+======================
 Store an event and publish the event to Kafka
 
 Quick start
@@ -25,3 +24,6 @@ Quick start
     KAFKA_SASL_MECHANISMS = 'KAFKA_SASL_MECHANISMS'
     KAFKA_SASL_USERNAME = 'KAFKA_SASL_USERNAME'
     KAFKA_SASL_PASSWORD = 'KAFKA_SASL_PASSWORD'
+
+
+4.
