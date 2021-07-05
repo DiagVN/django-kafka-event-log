@@ -25,3 +25,17 @@ KAFKA_SASL_MECHANISMS = 'KAFKA_SASL_MECHANISMS'
 KAFKA_SASL_USERNAME = 'KAFKA_SASL_USERNAME'
 KAFKA_SASL_PASSWORD = 'KAFKA_SASL_PASSWORD'
 ```
+
+## Usage
+
+```python
+from events.utils import PublishKafkaEventUtil
+from myapp.serializers.mymodel_serializer import MyModelSerializer
+
+PublishKafkaEventUtil.call(
+    event_name='Created',
+    model_object=model_obj,
+    serializer=ModelSerializer,
+    metadata={'purpose': 'testing'},
+)
+```

@@ -70,17 +70,17 @@ jobs:
       - run:
           name: init .pypirc
           command: |
-            $COMPOSE_COMMAND exec ci bash -c 'echo -e "[pypi]" >> ~/.pypirc'
-            $COMPOSE_COMMAND exec ci bash -c 'echo -e "username = nqtrg" >> ~/.pypirc'
-            $COMPOSE_COMMAND exec ci bash -c 'echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc'
-            $COMPOSE_COMMAND exec ci bash -c 'cat ~/.pypirc'
+            $COMPOSE_COMMAND exec ci bash -c "echo -e [pypi] >> ~/.pypirc"
+            $COMPOSE_COMMAND exec ci bash -c "echo -e username = nqtrg >> ~/.pypirc"
+            $COMPOSE_COMMAND exec ci bash -c "echo -e password = $PYPI_PASSWORD >> ~/.pypirc"
+            $COMPOSE_COMMAND exec ci bash -c "cat ~/.pypirc"
 
       - run:
           name: create packages
           command: $COMPOSE_COMMAND exec ci make package
-#      - run:
-#          name: upload to pypi
-#          command: $COMPOSE_COMMAND exec ci twine upload dist/*
+      - run:
+          name: upload to pypi
+          command: $COMPOSE_COMMAND exec ci twine upload dist/*
 
 workflows:
   build:
