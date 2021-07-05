@@ -1,19 +1,21 @@
+[![codecov](https://codecov.io/gh/DiagVN/django-kafka-event-log/branch/develop/graph/badge.svg?token=2FtNkItJO7)](https://codecov.io/gh/DiagVN/django-kafka-event-log)
+
 # Kafka Event
 
-Store an event and publish the event to Kafka
+Create an event from Django ORM object model, store the event into the database and also publish it into Kafka cluster.
 
 ## Setup
 
-Install package:
+Install the package:
 
 ```shell
-pip install git+https://github.com/DiagVN/django-kafka-event-log.git
+pip install django-kafka-event-log
 ```
 
-In `settings.py`:
+In your project's `settings.py`, include the app and add credentials for Kafka:
 
 ```python
-LOCAL_APPS = [
+INSTALLED_APPS = [
     ...
     'events',
 ]
@@ -26,7 +28,12 @@ KAFKA_SASL_USERNAME = 'KAFKA_SASL_USERNAME'
 KAFKA_SASL_PASSWORD = 'KAFKA_SASL_PASSWORD'
 ```
 
+Note: the credential should be read from environment variables.
+
 ## Usage
+
+This application has only 1 interface; it is `PublishKafkaEventUtil`. Given `myapp` is where the model object
+locates, `MyModelSerializer` is the data presenter, we can call the Util like this:
 
 ```python
 from events.utils import PublishKafkaEventUtil
@@ -38,4 +45,16 @@ PublishKafkaEventUtil.call(
     serializer=ModelSerializer,
     metadata={'purpose': 'testing'},
 )
+```
+
+## How To Release:
+
+This package is configured to release if the Git tag version is the same as the VERSION in `setup.py`. So, make sure
+their values are correct.
+
+```shell
+git commit -m "..."
+git tag <version>
+git push origin develop
+git push origin tag
 ```

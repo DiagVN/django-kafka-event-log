@@ -59,22 +59,22 @@ jobs:
           command: $COMPOSE_COMMAND up --build -d ci
           name: Build docker compose
       - run:
+          name: check variable
+          command: |
+            echo $CIRCLE_TAG
+      - run:
           command: $COMPOSE_COMMAND ps
           name: Compose ps
-      #      - run:
-      #          name: verify git tag vs. version
-      #          command: |
-      #            python3 -m venv venv
-      #            . venv/bin/activate
-      #            python setup.py verify
+      - run:
+          name: verify git tag vs. version
+          command: |
+            $COMPOSE_COMMAND exec -e CIRCLE_TAG=$CIRCLE_TAG ci python setup.py verify
       - run:
           name: init .pypirc
           command: |
             $COMPOSE_COMMAND exec ci bash -c "echo -e [pypi] >> ~/.pypirc"
             $COMPOSE_COMMAND exec ci bash -c "echo -e username = nqtrg >> ~/.pypirc"
             $COMPOSE_COMMAND exec ci bash -c "echo -e password = $PYPI_PASSWORD >> ~/.pypirc"
-            $COMPOSE_COMMAND exec ci bash -c "cat ~/.pypirc"
-
       - run:
           name: create packages
           command: $COMPOSE_COMMAND exec ci make package
@@ -91,32 +91,19 @@ workflows:
               ignore:
                 - develop
                 - master
-                - test
-  staging:
+  release:
     jobs:
       - build-and-test:
           filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
             branches:
-              only:
-                - develop
+              ignore: /.*/
       - deploy:
           requires:
             - build-and-test
           filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
             branches:
-              only:
-                - develop
-  prod:
-    jobs:
-      - build-and-test:
-          filters:
-            branches:
-              only:
-                - master
-  test:
-    jobs:
-      - deploy:
-          filters:
-            branches:
-              only:
-                - test
+              ignore: /.*/
