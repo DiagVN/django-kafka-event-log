@@ -41,7 +41,44 @@ jobs:
             #ci_env=`bash <(curl -s https://codecov.io/env)`
             #$COMPOSE_COMMAND exec $ci_env ci bash -c "bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
           name: Upload coverage
-
+  deploy:
+    environment:
+      COMPOSE_COMMAND: docker-compose -f docker-compose.yml -f .circleci/docker-compose.override.yml
+    executor: python/default
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Install Docker Compose
+          command: pip install -U docker-compose
+      - run:
+          name: Copy env
+          command: cp .env.example .env
+      - run:
+          command: $COMPOSE_COMMAND up --build -d ci
+          name: Build docker compose
+      - run:
+          command: $COMPOSE_COMMAND ps
+          name: Compose ps
+      #      - run:
+      #          name: verify git tag vs. version
+      #          command: |
+      #            python3 -m venv venv
+      #            . venv/bin/activate
+      #            python setup.py verify
+      - run:
+          name: init .pypirc
+          command: |
+            $COMPOSE_COMMAND exec ci echo -e "[pypi]" >> ~/.pypirc
+            $COMPOSE_COMMAND exec ci echo -e "username = nqtrg" >> ~/.pypirc
+            $COMPOSE_COMMAND exec ci echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
+      - run:
+          name: create packages
+          command: $COMPOSE_COMMAND exec ci make package
+      - run:
+          name: upload to pypi
+          command: $COMPOSE_COMMAND exec ci twine upload dist/*
 
 workflows:
   build:
@@ -59,7 +96,13 @@ workflows:
             branches:
               only:
                 - develop
-
+      - deploy:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only:
+                - develop
   prod:
     jobs:
       - build-and-test:
