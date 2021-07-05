@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import os
 from pathlib import Path
 
 import environ
@@ -84,7 +83,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'root.urls'
+# ROOT_URLCONF = 'root.urls'
 
 TEMPLATES = [
     {
@@ -102,7 +101,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'root.wsgi.application'
+# WSGI_APPLICATION = 'root.wsgi.application'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -139,7 +138,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Kafka
 KAFKA_GROUP = env('KAFKA_GROUP')
@@ -160,7 +159,7 @@ SWAGGER_SETTINGS = {
 }
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'root.common.drf_exception_handler.drf_exception_handler',
+    # 'EXCEPTION_HANDLER': 'root.common.drf_exception_handler.drf_exception_handler',
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
@@ -189,10 +188,6 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': env('LOGGING_LEVEL'),
     },
     'loggers': {
         'environ': {
