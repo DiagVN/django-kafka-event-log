@@ -1,5 +1,6 @@
 import json
 import logging
+from datetime import datetime
 
 from confluent_kafka import Producer
 from django.conf import settings
@@ -36,6 +37,7 @@ class PublishKafkaEventUtil(BaseServiceMixin):
             'event_name': self.event_name,
             'metadata': self.metadata,
             'data': self.serializer(self.model_object).data,
+            'timestamp': datetime.now().isoformat(),
         }
 
         return json.dumps(message)

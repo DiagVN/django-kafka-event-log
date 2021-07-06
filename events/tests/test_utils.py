@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 from unittest import mock
 
+import pytz
 from django.test import TransactionTestCase
 
 from events.models import Events
@@ -25,16 +26,20 @@ class TestPublishKafkaEventUtil(TransactionTestCase):
         )
         self.producer_patcher = mock.patch('events.utils.Producer')
         self.producer = self.producer_patcher.start()
+        self.mock_date = datetime(2021, 1, 1, 1, 0, 0, 727800, pytz.UTC)
 
     def tearDown(self) -> None:
         self.producer_patcher.stop()
 
-    def test_build_kafka_message(self):
+    @mock.patch('events.utils.datetime')
+    def test_build_kafka_message(self, mock_datetime):
+        mock_datetime.now.return_value = self.mock_date
         message = self.util.build_kafka_message()
         expected_message = json.dumps({
             'event_name': 'Created',
             'metadata': {'purpose': 'testing'},
             'data': {'name': 'test', 'created_at': '2021-07-02T06:00:34.727800Z'},
+            'timestamp': '2021-01-01T01:00:00.727800+00:00',
         })
 
         self.assertEqual(message, expected_message)
@@ -58,8 +63,10 @@ class TestPublishKafkaEventUtil(TransactionTestCase):
         )
         self.producer.flush.assert_called_once()
 
+    @mock.patch('events.utils.datetime')
     @mock.patch('events.utils.PublishKafkaEventUtil.publish_kafka_message', return_value=None)
-    def test_exec(self, mock_publish_kafka_message):
+    def test_exec(self, mock_publish_kafka_message, mock_datetime):
+        mock_datetime.now.return_value = self.mock_date
         self.producer.return_value = mock.MagicMock()
         PublishKafkaEventUtil.call(
             event_name='Created',
@@ -71,6 +78,7 @@ class TestPublishKafkaEventUtil(TransactionTestCase):
             'event_name': 'Created',
             'metadata': {'purpose': 'testing'},
             'data': {'name': 'test', 'created_at': '2021-07-02T06:00:34.727800Z'},
+            'timestamp': '2021-01-01T01:00:00.727800+00:00',
         })
         mock_publish_kafka_message.assert_called_once_with(
             message,
