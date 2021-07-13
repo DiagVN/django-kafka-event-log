@@ -50,7 +50,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3 :: Only',
     ],
-    packages=setuptools.find_packages(where="events"),
+    packages=setuptools.find_packages(where="./"),
     keywords='django kafka event-log',
     python_requires='>=3',
     cmdclass={
