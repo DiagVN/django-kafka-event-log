@@ -1,16 +1,11 @@
 [tool.poetry]
 name = "events"
-version = "0.1.6"
+version = "0.1.0"
 description = ""
 authors = ["nqtrg <zquangu112z@gmail.com>"]
 
-packages = [
-    { include = "events" },
-    { include = "events/**/*.py" },
-]
-
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 django-environ = "^0.4.5"
 uvicorn = "^0.13.4"
 Django = "^3.2.3"
