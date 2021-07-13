@@ -3,11 +3,12 @@
 import os
 import sys
 
+import setuptools
 from setuptools import setup
 from setuptools.command.install import install
 
-# circleci.py version
-VERSION = '0.1.5'
+# must match git tag to release
+VERSION = '0.1.6'
 
 
 def readme():
@@ -49,8 +50,9 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3 :: Only',
     ],
+    packages=setuptools.find_packages(where="events"),
     keywords='django kafka event-log',
-    python_requires='>=3.8',
+    python_requires='>=3',
     cmdclass={
         'verify': VerifyVersionCommand,
     }

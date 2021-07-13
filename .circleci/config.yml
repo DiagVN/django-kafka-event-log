@@ -89,7 +89,6 @@ workflows:
           filters:
             branches:
               ignore:
-                - develop
                 - master
   release:
     jobs:
