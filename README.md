@@ -2,7 +2,7 @@
 
 # Kafka Event
 
-Create an event from Django ORM object model, store the event into the database and also publish it into Kafka cluster.
+Create an event from Django ORM object model, store the event into the database and also publish it into Kafka cluster. The Kafka topic name is `django_app_name.model_name`.
 
 ## Setup
 
@@ -29,6 +29,8 @@ KAFKA_SASL_PASSWORD = 'KAFKA_SASL_PASSWORD'
 ```
 
 Note: the credential should be read from environment variables.
+
+Create the topic in Kafka cluster: `django_app_name.model_name`. This is where the event log will be pushed into.
 
 ## Usage
 
