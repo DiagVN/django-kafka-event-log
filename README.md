@@ -1,6 +1,6 @@
 [![codecov](https://codecov.io/gh/DiagVN/django-kafka-event-log/branch/develop/graph/badge.svg?token=2FtNkItJO7)](https://codecov.io/gh/DiagVN/django-kafka-event-log)
 
-# Kafka Event
+# Django Kafka Event Log
 
 Create an event from Django ORM object model, store the event into the database and also publish it into Kafka cluster.
 
