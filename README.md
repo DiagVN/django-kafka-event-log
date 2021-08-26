@@ -2,7 +2,27 @@
 
 # Kafka Event
 
-Create an event from Django ORM object model, store the event into the database and also publish it into Kafka cluster. The Kafka topic name is `django_app_name.model_name`.
+Create an event from Django ORM object model, store the event into the database and also publish it into Kafka cluster.
+
+Example: an event log when a new user is created
+- Kafka topic: `myapp.user`
+- Kafka message:
+```
+{
+  "event_name": "Created",
+  "metadata": {
+    "message_type": "NW"
+  },
+  "data": {
+    "id": 10,
+    "first_name": "First name",
+    "created_at": "2021-08-02T07:36:16.180973Z",
+    "updated_at": "2021-08-25T09:22:50.650822Z"
+  },
+  "timestamp": "2021-08-25T09:22:50.875565"
+}
+```
+
 
 ## Setup
 
